@@ -1,6 +1,22 @@
-function ToDoList() {
+import { Link } from "react-router-dom";
+import type { ToDoItem } from "../types";
+
+interface ToDoListProps {
+  todos: ToDoItem[];
+}
+
+
+function ToDoList({ todos }: ToDoListProps) {
   return (
-    <h2>ToDoList</h2>
+    <ul>
+      {todos.map(todo => (
+        <li key={todo.id}>
+          <Link to={`/todos/${todo.id}`}>
+            {todo.title} - {todo.completed ? "✅" : "❌"}
+          </Link>
+        </li>
+      ))}
+    </ul>
   )
 }
 
