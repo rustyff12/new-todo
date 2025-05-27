@@ -1,31 +1,30 @@
 import { useEffect, useState } from "react";
-import type { ToDoItem } from "../types";
+import type { ToDoItemType } from "../types";
 import ToDoList from "../components/ToDoList";
 
 function Home() {
-  const [todos, setTodos] = useState<ToDoItem[]>([]);
+  const [todos, setTodos] = useState<ToDoItemType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const url = "http://localhost:8000/api/todos/"
+  const url = "http://localhost:8000/api/todos/";
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
         const res = await fetch(url);
         if (!res.ok) {
-          throw new Error("Failed to fetch todos")
+          throw new Error("Failed to fetch todos");
         }
-        const data: ToDoItem[] = await res.json()
-        setTodos(data)
+        const data: ToDoItemType[] = await res.json();
+        setTodos(data);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
 
     fetchTodos();
-
   }, []);
 
   if (loading) return <p>Loading todos...</p>;

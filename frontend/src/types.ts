@@ -1,4 +1,4 @@
-export interface ToDoItem {
+export interface ToDoItemType {
     id: number;
     title: string;
     completed: boolean;
