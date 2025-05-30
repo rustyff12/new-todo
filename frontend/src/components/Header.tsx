@@ -24,7 +24,7 @@ function Header() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden focus:outline-none"
+          className="md:hidden focus:outline-none cursor-pointer"
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
