@@ -4,13 +4,31 @@ interface ToDOFormProps {
   onAdd: () => void;
 }
 
+interface FormData {
+  title: string;
+  description: string;
+}
+
 function ToDoForm({ onAdd }: ToDOFormProps) {
-  const [title, setTitle] = useState("");
+  const [formData, setFormData] = useState<FormData>({
+    title: "",
+    description: "",
+  });
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) {
+    if (!formData.title.trim()) {
       return;
     }
 
@@ -21,14 +39,17 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title }),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
         throw new Error("Failed to create todo");
       }
 
-      setTitle("");
+      setFormData({
+        title: "",
+        description: "",
+      });
       onAdd();
     } catch (error) {
       console.error(error);
@@ -38,18 +59,28 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 mb-6">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">
       <input
         type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Enter a new todo"
+        name="title"
+        value={formData.title}
+        onChange={handleChange}
+        placeholder="Title"
         className="flex-grow border border-gray-300 rounded px-3 py-2"
       />
+      <textarea
+        name="description"
+        value={formData.description}
+        onChange={handleChange}
+        placeholder="Description (optional)"
+        className="border border-gray-300 rounded px-3 py-2 resize-none"
+        rows={4}
+      ></textarea>
+
       <button
         type="submit"
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
       >
         {loading ? "Adding..." : "Add"}
       </button>

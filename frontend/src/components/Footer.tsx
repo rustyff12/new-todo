@@ -6,6 +6,7 @@ function Footer() {
         <a
           href="https://github.com/rustyff12"
           className="hover:text-cyan-400 transition-colors"
+          target="_blank"
         >
           Russell Frankpitt
         </a>

@@ -31,7 +31,7 @@ function Home() {
   if (loading) return <p>Loading todos...</p>;
 
   return (
-    <div>
+    <div className="max-w-4xl flex flex-col mx-auto">
       <ToDoForm onAdd={fetchTodos} />
       {todos.length ? <ToDoList todos={todos} /> : <p>No todos yet!</p>}
     </div>
