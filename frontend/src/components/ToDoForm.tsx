@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import toast from "react-hot-toast";
 interface ToDOFormProps {
   onAdd: () => void;
 }
@@ -51,8 +51,10 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
         description: "",
       });
       onAdd();
+      toast.success("Todo added!");
     } catch (error) {
       console.error(error);
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -65,7 +67,7 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
         name="title"
         value={formData.title}
         onChange={handleChange}
-        placeholder="Title"
+        placeholder="Title (required)"
         className="flex-grow border border-gray-300 rounded px-3 py-2"
       />
       <textarea
@@ -79,8 +81,8 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
 
       <button
         type="submit"
-        disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+        disabled={loading || !formData.title.trim()}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
       >
         {loading ? "Adding..." : "Add"}
       </button>
