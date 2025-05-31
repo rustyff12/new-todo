@@ -62,7 +62,7 @@ function ToDoItem({ todo }: ToDoItemProps) {
         {new Date(localTodo.created).toLocaleString()}
       </p>
 
-      <p>
+      <p className="whitespace-pre-line">
         <span className="font-bold">Description: </span>
         {localTodo.description || (
           <em className="text-gray-500">No description</em>

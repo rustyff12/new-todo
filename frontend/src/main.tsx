@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import App from "./App.tsx";
 import Home from "./pages/Home.tsx";
 import ToDoDetail from "./pages/ToDoDetail.tsx";
+import NotFound from "./pages/NotFound.tsx";
 import "./index.css";
 
 // Route definitions
@@ -13,8 +14,9 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      { path: "", element: <Home /> },
+      { index: true, element: <Home /> },
       { path: "todos/:id", element: <ToDoDetail /> },
+      { path: "*", element: <NotFound /> },
     ],
   },
 ]);
