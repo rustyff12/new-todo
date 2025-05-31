@@ -15,9 +15,15 @@ function Header() {
         <nav className="hidden md:block">
           <Link
             to="/"
-            className="text-lg font-medium hover:text-cyan-400 transition-colors"
+            className="text-lg font-medium hover:text-blue-400 hover:underline transition-colors"
           >
             Home
+          </Link>
+          <Link
+            to="add"
+            className="text-lg font-medium hover:text-blue-400 hover:underline transition-colors ml-4"
+          >
+            Add
           </Link>
         </nav>
 
@@ -32,13 +38,20 @@ function Header() {
 
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <div className="md:hidden px-4 pb-4">
+        <div className="md:hidden px-10 pb-4">
           <Link
             to="/"
-            className="block py-2 text-lg font-medium hover:text-cyan-400 transition-colors"
+            className="block py-2 text-lg font-medium hover:text-blue-400 hover:underline transition-colors"
             onClick={() => setMenuOpen(false)}
           >
             Home
+          </Link>
+          <Link
+            to="add"
+            className="block py-2 text-lg font-medium hover:text-blue-400 hover:underline transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            Add
           </Link>
         </div>
       )}

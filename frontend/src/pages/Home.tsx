@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { ToDoItemType } from "../types";
 import ToDoList from "../components/ToDoList";
-import ToDoForm from "../components/ToDoForm";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [todos, setTodos] = useState<ToDoItemType[]>([]);
@@ -32,11 +32,15 @@ function Home() {
 
   return (
     <div className=" flex flex-col mx-auto">
-      <ToDoForm onAdd={fetchTodos} />
       <h2 className="text-2xl front-bold underline text-slate-800 mb-4">
         Todo List
       </h2>
       {todos.length ? <ToDoList todos={todos} /> : <p>No todos yet!</p>}
+      <Link to="add">
+        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 cursor-pointer mt-4 mx-auto md:w-1/2 w-full">
+          Add
+        </button>
+      </Link>
     </div>
   );
 }

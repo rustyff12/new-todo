@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import Home from "./pages/Home.tsx";
 import ToDoDetail from "./pages/ToDoDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import AddTodo from "./pages/AddTodo.tsx";
 import "./index.css";
 
 // Route definitions
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "todos/:id", element: <ToDoDetail /> },
+      { path: "add", element: <AddTodo /> },
       { path: "*", element: <NotFound /> },
     ],
   },
