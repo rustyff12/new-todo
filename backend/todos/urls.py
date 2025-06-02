@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ToDoItemViewSet, protected_view
+from .views import ToDoItemViewSet, protected_view, register_user
 
 router = DefaultRouter()
 router.register(r'todos', ToDoItemViewSet)
@@ -8,4 +8,5 @@ router.register(r'todos', ToDoItemViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('protected/', protected_view),
+    path('register/', register_user)
 ]

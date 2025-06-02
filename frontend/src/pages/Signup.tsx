@@ -15,15 +15,21 @@ function Signup() {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function isStrongPassword(password: string): boolean {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (
       !formData.username.trim() ||
@@ -70,7 +76,7 @@ function Signup() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">
@@ -104,14 +110,15 @@ function Signup() {
         type="submit"
         disabled={
           loading ||
-          (!formData.username.trim() &&
-            !formData.password_1.trim() &&
-            !formData.password_2.trim()) ||
-          formData.password_1 !== formData.password_2
+          !formData.username.trim() ||
+          !formData.password_1.trim() ||
+          !formData.password_2.trim() ||
+          formData.password_1 !== formData.password_2 ||
+          !isStrongPassword(formData.password_1)
         }
         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
       >
-        {loading ? "Adding..." : "Add"}
+        {loading ? "Creating Account..." : "Sign Up"}
       </button>
     </form>
   );
