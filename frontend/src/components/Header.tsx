@@ -5,6 +5,31 @@ import { Menu, X } from "lucide-react";
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const css_desktop =
+    "text-lg font-medium ml-4 hover:text-blue-400 hover:underline transition-colors";
+
+  const css_mobile =
+    "block py-2 text-lg font-medium hover:text-blue-400 hover:underline transition-colors";
+
+  const nav_obj = [
+    {
+      path: "/",
+      name: "Home",
+    },
+    {
+      path: "add",
+      name: "Add",
+    },
+    {
+      path: "login",
+      name: "Login",
+    },
+    {
+      path: "signup",
+      name: "Sign up",
+    },
+  ];
+
   return (
     <header className="bg-slate-800 text-white shadow-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -13,18 +38,11 @@ function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:block">
-          <Link
-            to="/"
-            className="text-lg font-medium hover:text-blue-400 hover:underline transition-colors"
-          >
-            Home
-          </Link>
-          <Link
-            to="add"
-            className="text-lg font-medium hover:text-blue-400 hover:underline transition-colors ml-4"
-          >
-            Add
-          </Link>
+          {nav_obj.map((item) => (
+            <Link to={item.path} className={css_desktop}>
+              {item.name}
+            </Link>
+          ))}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -39,20 +57,15 @@ function Header() {
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
         <div className="md:hidden px-10 pb-4">
-          <Link
-            to="/"
-            className="block py-2 text-lg font-medium hover:text-blue-400 hover:underline transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            Home
-          </Link>
-          <Link
-            to="add"
-            className="block py-2 text-lg font-medium hover:text-blue-400 hover:underline transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            Add
-          </Link>
+          {nav_obj.map((item) => (
+            <Link
+              to={item.path}
+              className={css_mobile}
+              onClick={() => setMenuOpen(false)}
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
       )}
     </header>
