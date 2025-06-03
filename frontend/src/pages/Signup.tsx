@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
   username: string;
@@ -14,6 +15,8 @@ function Signup() {
     password_2: "",
   });
   const [loading, setLoading] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const navigate = useNavigate();
 
   function isStrongPassword(password: string): boolean {
     const regex =
@@ -70,6 +73,7 @@ function Signup() {
         password_1: "",
         password_2: "",
       });
+      navigate("/login");
     } catch (error) {
       toast.error("Something went wrong. Try again.");
       console.error(error);
@@ -80,6 +84,10 @@ function Signup() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">
+      <label htmlFor="username" className="block text-sm font-medium">
+        Username
+      </label>
+
       <input
         type="text"
         name="username"
@@ -88,15 +96,47 @@ function Signup() {
         placeholder="Username (required)"
         className="flex-grow border border-gray-300 rounded px-3 py-2"
       />
-      <input
-        type="password"
-        name="password_1"
-        value={formData.password_1}
-        onChange={handleChange}
-        placeholder="Password (required)"
-        className="flex-grow border border-gray-300 rounded px-3 py-2"
-      />
-      <p>Please repeat password</p>
+
+      <div
+        className="relative"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        <label htmlFor="password_1" className="block text-sm font-medium">
+          Password
+        </label>
+
+        <span
+          className="absolute right-0 top-0 text-blue-500 text-sm cursor-pointer select-none"
+          onClick={() => setShowTooltip((prev) => !prev)} // toggles on mobile
+        >
+          ℹ️
+        </span>
+        {showTooltip && (
+          <div className="absolute right-0 top-6 w-64 bg-white border border-gray-300 rounded shadow-md text-black text-sm p-3 z-10">
+            Password must contain at least:
+            <ul className="list-disc list-inside mt-1 space-y-1">
+              <li>8 characters</li>
+              <li>1 uppercase letter</li>
+              <li>1 lowercase letter</li>
+              <li>1 number</li>
+              <li>1 special character</li>
+            </ul>
+          </div>
+        )}
+        <input
+          type="password"
+          name="password_1"
+          value={formData.password_1}
+          onChange={handleChange}
+          placeholder="Password (required)"
+          className="w-full border border-gray-300 rounded px-3 py-2"
+        />
+      </div>
+
+      <label htmlFor="password_2" className="block text-sm font-medium">
+        Please repeat password
+      </label>
       <input
         type="password"
         name="password_2"

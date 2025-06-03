@@ -36,8 +36,8 @@ function Home() {
         Todo List
       </h2>
       {todos.length ? <ToDoList todos={todos} /> : <p>No todos yet!</p>}
-      <Link to="add">
-        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 cursor-pointer mt-4 mx-auto md:w-1/2 w-full">
+      <Link to="add" className="md:flex md:flex-row md:justify-center">
+        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 cursor-pointer mt-4  md:w-1/2 w-full">
           Add
         </button>
       </Link>
