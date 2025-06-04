@@ -10,7 +10,7 @@ function ToDoDetail() {
   const itemUrl = `http://localhost:8000/api/todos/${id}`;
 
   useEffect(() => {
-    const fetchTodo = async () => {
+    async function fetchTodo() {
       try {
         const res = await fetch(itemUrl);
         if (!res.ok) {
@@ -23,7 +23,7 @@ function ToDoDetail() {
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchTodo();
   }, [itemUrl]);

@@ -16,17 +16,17 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (
+  function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!formData.title.trim()) {
       return;
@@ -65,7 +65,7 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">

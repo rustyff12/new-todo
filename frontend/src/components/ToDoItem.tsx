@@ -9,7 +9,7 @@ function ToDoItem({ todo }: ToDoItemProps) {
   const [localTodo, setLocalTodo] = useState(todo);
   const [updating, setUpdating] = useState(false);
 
-  const toggleCompleted = async () => {
+  async function toggleCompleted() {
     setUpdating(true);
     try {
       const response = await fetch(
@@ -34,7 +34,7 @@ function ToDoItem({ todo }: ToDoItemProps) {
     } finally {
       setUpdating(false);
     }
-  };
+  }
 
   return (
     <article className="border border-gray-300 rounded p-4 shadow-md space-y-3">
