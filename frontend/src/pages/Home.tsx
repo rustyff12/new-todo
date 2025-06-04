@@ -10,7 +10,7 @@ function Home() {
 
   const url = "http://localhost:8000/api/todos/";
 
-  const fetchTodos = async () => {
+  async function fetchTodos() {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -22,7 +22,7 @@ function Home() {
     try {
       const res = await fetch(url, {
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -44,7 +44,7 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchTodos();

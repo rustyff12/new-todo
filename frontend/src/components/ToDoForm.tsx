@@ -32,12 +32,19 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
       return;
     }
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to add todos");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch("http://localhost:8000/api/todos/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
