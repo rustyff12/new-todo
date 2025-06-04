@@ -39,7 +39,7 @@ function Header() {
         {/* Desktop Nav */}
         <nav className="hidden md:block">
           {nav_obj.map((item) => (
-            <Link to={item.path} className={css_desktop}>
+            <Link to={item.path} className={css_desktop} key={item.name}>
               {item.name}
             </Link>
           ))}
