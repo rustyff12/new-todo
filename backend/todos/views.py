@@ -7,8 +7,14 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 class ToDoItemViewSet(viewsets.ModelViewSet):
-    queryset = ToDoItem.objects.all().order_by('-created')
     serializer_class = ToDoItemSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return ToDoItem.objects.filter(user=self.request.user).order_by('-created')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
