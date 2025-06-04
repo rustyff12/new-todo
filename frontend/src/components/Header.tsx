@@ -39,7 +39,7 @@ function Header() {
         {/* Desktop Nav */}
         <nav className="hidden md:block">
           {nav_obj.map((item) => (
-            <Link to={item.path} className={css_desktop} key={item.name}>
+            <Link key={item.name} to={item.path} className={css_desktop}>
               {item.name}
             </Link>
           ))}
@@ -59,6 +59,7 @@ function Header() {
         <div className="md:hidden px-10 pb-4">
           {nav_obj.map((item) => (
             <Link
+              key={item.name}
               to={item.path}
               className={css_mobile}
               onClick={() => setMenuOpen(false)}
