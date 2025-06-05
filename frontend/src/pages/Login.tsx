@@ -41,6 +41,10 @@ function Login() {
         return;
       }
 
+      // Clear existing tokens
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
       toast.success("Logged in!");

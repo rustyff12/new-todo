@@ -60,7 +60,7 @@ function ToDoItem({ todo }: ToDoItemProps) {
       </p>
 
       <p>
-        <span>Created: </span>
+        <span className="font-bold">Created: </span>
         {new Date(localTodo.created).toLocaleString()}
       </p>
 

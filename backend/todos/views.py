@@ -5,6 +5,7 @@ from .serializers import ToDoItemSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 from .permissions import IsOwner
 
 class ToDoItemViewSet(viewsets.ModelViewSet):
@@ -41,3 +42,15 @@ def register_user(request):
 
     user = User.objects.create_user(username=username, password=password)
     return Response({"detail": "User created successfully"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_view(request):
+    try:
+        refresh_token = request.data["refresh"]
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        return Response({"detail": "Logged out successfully"}, status=status.HTTP_205_RESET_CONTENT)
+    except Exception as e:
+        return Response({"detail": "Invalid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
