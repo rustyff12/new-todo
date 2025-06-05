@@ -32,7 +32,7 @@ function ToDoForm({ onAdd }: ToDOFormProps) {
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access");
     if (!token) {
       toast.error("You must be logged in to add todos");
       return;

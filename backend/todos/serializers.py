@@ -6,6 +6,7 @@ class ToDoItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ToDoItem
         fields = '__all__'
+        read_only_fields = ['user']
 
     def validate_title(self, value):
         return bleach.clean(value, tags=[], strip=True)

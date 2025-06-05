@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound.tsx";
 import AddTodo from "./pages/AddTodo.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
+import Account from "./pages/Account.tsx";
 import "./index.css";
 
 // Route definitions
@@ -22,13 +23,14 @@ const router = createBrowserRouter([
       { path: "add", element: <AddTodo /> },
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
+      { path: "account", element: <Account /> },
       { path: "*", element: <NotFound /> },
     ],
   },
 ]);
 createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <>
     <RouterProvider router={router} />
     <Toaster position="top-right" reverseOrder={false} />
-  </React.StrictMode>
+  </>
 );

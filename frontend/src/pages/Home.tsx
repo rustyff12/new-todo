@@ -4,14 +4,15 @@ import ToDoList from "../components/ToDoList";
 import { Link } from "react-router-dom";
 
 function Home() {
+  // console.log("Home component rendered");
   const [todos, setTodos] = useState<ToDoItemType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   const url = "http://localhost:8000/api/todos/";
 
   async function fetchTodos() {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access");
 
     if (!token) {
       setIsAuthenticated(false);
@@ -50,7 +51,7 @@ function Home() {
     fetchTodos();
   }, []);
 
-  if (loading) return <p>Loading todos...</p>;
+  if (loading || isAuthenticated === null) return <p>Loading todos...</p>;
 
   if (!isAuthenticated) {
     return (

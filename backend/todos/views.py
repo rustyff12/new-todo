@@ -5,10 +5,11 @@ from .serializers import ToDoItemSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from .permissions import IsOwner
 
 class ToDoItemViewSet(viewsets.ModelViewSet):
     serializer_class = ToDoItemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     def get_queryset(self):
         return ToDoItem.objects.filter(user=self.request.user).order_by('-created')

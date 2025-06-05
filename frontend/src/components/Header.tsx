@@ -28,6 +28,10 @@ function Header() {
       path: "signup",
       name: "Sign up",
     },
+    {
+      path: "account",
+      name: "Account",
+    },
   ];
 
   return (

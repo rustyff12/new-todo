@@ -44,7 +44,7 @@ function Login() {
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
       toast.success("Logged in!");
-      navigate("/todos");
+      navigate("/");
     } catch (error) {
       toast.error("Something went wrong.");
       console.error(error);
@@ -72,7 +72,7 @@ function Login() {
       <input
         type="password"
         name="password"
-        value={formData.username}
+        value={formData.password}
         onChange={handleChange}
         placeholder="Password"
         className="w-full border border-gray-300 rounded px-3 py-2"
