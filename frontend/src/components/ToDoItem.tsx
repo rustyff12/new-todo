@@ -11,6 +11,7 @@ function ToDoItem({ todo }: ToDoItemProps) {
 
   async function toggleCompleted() {
     setUpdating(true);
+    const token = localStorage.getItem("access");
     try {
       const response = await fetch(
         `http://localhost:8000/api/todos/${localTodo.id}/`,
@@ -18,6 +19,7 @@ function ToDoItem({ todo }: ToDoItemProps) {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ completed: !localTodo.completed }),
         }

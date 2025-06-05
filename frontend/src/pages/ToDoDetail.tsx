@@ -11,12 +11,20 @@ function ToDoDetail() {
 
   useEffect(() => {
     async function fetchTodo() {
+      const token = localStorage.getItem("access");
+
       try {
-        const res = await fetch(itemUrl);
-        if (!res.ok) {
+        const response = await fetch(itemUrl, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
           throw new Error("Failed to fetch todo");
         }
-        const data: ToDoItemType = await res.json();
+        const data: ToDoItemType = await response.json();
         setTodo(data);
       } catch (error) {
         console.error(error);

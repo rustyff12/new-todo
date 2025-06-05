@@ -5,7 +5,7 @@ function AddTodo() {
   const navigate = useNavigate();
 
   function handleAdd() {
-    navigate("/todos");
+    navigate("/");
   }
   return (
     <div className="max-w-md mx-auto">
