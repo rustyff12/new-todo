@@ -27,11 +27,12 @@ def protected_view(request):
         "user_id": user.id
     })
     
-
+# sign up
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
     username = request.data.get("username") 
+    email = request.data.get("email") 
     password = request.data.get("password") 
 
     if not username or not password:
@@ -43,7 +44,7 @@ def register_user(request):
     user = User.objects.create_user(username=username, password=password)
     return Response({"detail": "User created successfully"}, status=status.HTTP_201_CREATED)
 
-
+# log out
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
@@ -54,3 +55,21 @@ def logout_view(request):
         return Response({"detail": "Logged out successfully"}, status=status.HTTP_205_RESET_CONTENT)
     except Exception as e:
         return Response({"detail": "Invalid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
+    
+# user info
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def account_info(request):
+    user = request.user
+    todos = user.todos.all()
+    total = todos.count()
+    complete = todos.filter(completed=True).count()
+    incomplete = todos.filter(completed=False).count()
+
+    return Response({
+        "username": user.username,
+        "email": user.email,
+        "todoTotal": total,
+        "complete": complete,
+        "incomplete": incomplete,
+    })
