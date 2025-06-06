@@ -8,10 +8,12 @@ function AddTodo() {
     navigate("/");
   }
   return (
-    <div className="max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Add a New Todo</h2>
+    <section className="border border-gray-300 rounded p-4 shadow-md space-y-3">
+      <h2 className="text-2xl font-bold underline text-slate-800 mb-4">
+        Add a New Todo
+      </h2>
       <ToDoForm onAdd={handleAdd} />
-    </div>
+    </section>
   );
 }
 

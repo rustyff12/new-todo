@@ -16,23 +16,25 @@ function Account() {
 
   return (
     <article className="border border-gray-300 rounded p-4 shadow-md space-y-3">
-      <h2 className="text-2xl font-bold underline text-slate-800">
+      <h2 className="text-2xl font-bold underline text-slate-800 mb-4">
         Welcome {accountInfo.username}
       </h2>
       <p>
-        <span className="font-bold">Username: </span> {accountInfo.username}
+        <span className=" font-medium">Username: </span> {accountInfo.username}
       </p>
       <p>
-        <span className="font-bold">Email: </span> {accountInfo.email}
+        <span className=" font-medium">Email: </span> {accountInfo.email}
       </p>
       <p>
-        <span className="font-bold">Total Todos: </span> {accountInfo.todoTotal}
+        <span className=" font-medium">Total Todos: </span>{" "}
+        {accountInfo.todoTotal}
       </p>
       <p>
-        <span className="font-bold">Complete: </span> {accountInfo.complete}
+        <span className=" font-medium">Complete: </span> {accountInfo.complete}
       </p>
       <p>
-        <span className="font-bold">Incomplete: </span> {accountInfo.incomplete}
+        <span className=" font-medium">Incomplete: </span>{" "}
+        {accountInfo.incomplete}
       </p>
 
       <div className="flex justify-around">

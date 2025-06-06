@@ -58,38 +58,43 @@ function Login() {
   }
 
   return (
-    <form onSubmit={handleLogin} className="flex flex-col gap-4 mb-6">
-      <label htmlFor="username" className="block text-sm font-medium">
-        Username
-      </label>
-      <input
-        type="text"
-        name="username"
-        value={formData.username}
-        onChange={handleChange}
-        placeholder="Username"
-        className="w-full border border-gray-300 rounded px-3 py-2"
-      />
-      <label htmlFor="password" className="block text-sm font-medium">
-        Password
-      </label>
-      <input
-        type="password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-        placeholder="Password"
-        className="w-full border border-gray-300 rounded px-3 py-2"
-      />
+    <section className="border border-gray-300 rounded p-4 shadow-md space-y-3">
+      <h2 className="text-2xl font-bold underline text-slate-800 mb-4">
+        Log In
+      </h2>
+      <form onSubmit={handleLogin} className="flex flex-col gap-4 mb-6">
+        <label htmlFor="username" className="block text-sm font-medium">
+          Username
+        </label>
+        <input
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          placeholder="Username"
+          className="w-full border border-gray-300 rounded px-3 py-2"
+        />
+        <label htmlFor="password" className="block text-sm font-medium">
+          Password
+        </label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          className="w-full border border-gray-300 rounded px-3 py-2"
+        />
 
-      <button
-        type="submit"
-        disabled={loading || !formData.username || !formData.password}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 disabled:opacity-50"
-      >
-        {loading ? "Logging in..." : "Login"}
-      </button>
-    </form>
+        <button
+          type="submit"
+          disabled={loading || !formData.username || !formData.password}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 disabled:opacity-50"
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
+    </section>
   );
 }
 

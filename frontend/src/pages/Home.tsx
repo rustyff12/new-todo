@@ -4,7 +4,6 @@ import ToDoList from "../components/ToDoList";
 import { Link } from "react-router-dom";
 
 function Home() {
-  // console.log("Home component rendered");
   const [todos, setTodos] = useState<ToDoItemType[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -55,7 +54,7 @@ function Home() {
 
   if (!isAuthenticated) {
     return (
-      <div className="flex flex-col items-center mt-12">
+      <section className="border border-gray-300 rounded p-4 shadow-md space-y-3">
         <h2 className="text-xl mb-4 text-gray-700">You're not logged in</h2>
         <Link to="/login">
           <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 mb-2">
@@ -68,12 +67,12 @@ function Home() {
             Sign up here
           </Link>
         </p>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div className="flex flex-col mx-auto">
+    <section className="border border-gray-300 rounded p-4 shadow-md space-y-3">
       <h2 className="text-2xl font-bold underline text-slate-800 mb-4">
         Todo List
       </h2>
@@ -83,7 +82,7 @@ function Home() {
           Add
         </button>
       </Link>
-    </div>
+    </section>
   );
 }
 
