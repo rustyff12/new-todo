@@ -5,6 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 interface FormData {
   username: string;
+  email: string;
   password_1: string;
   password_2: string;
 }
@@ -12,6 +13,7 @@ interface FormData {
 function Signup() {
   const [formData, setFormData] = useState<FormData>({
     username: "",
+    email: "",
     password_1: "",
     password_2: "",
   });
@@ -27,6 +29,10 @@ function Signup() {
     return regex.test(password);
   }
 
+  function isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -39,14 +45,26 @@ function Signup() {
     e.preventDefault();
     if (
       !formData.username.trim() ||
+      !formData.email.trim() ||
       !formData.password_1.trim() ||
       !formData.password_2.trim()
     ) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    if (!isValidEmail(formData.email)) {
+      toast.error("Please enter a valid email address.");
       return;
     }
 
     if (formData.password_1 !== formData.password_2) {
-      toast.error("Paaswords do not match");
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    if (!isStrongPassword(formData.password_1)) {
+      toast.error("Password is not strong enough.");
       return;
     }
 
@@ -59,6 +77,7 @@ function Signup() {
         },
         body: JSON.stringify({
           username: formData.username,
+          email: formData.email,
           password: formData.password_1,
         }),
       });
@@ -73,6 +92,7 @@ function Signup() {
 
       setFormData({
         username: "",
+        email: "",
         password_1: "",
         password_2: "",
       });
@@ -101,6 +121,19 @@ function Signup() {
           value={formData.username}
           onChange={handleChange}
           placeholder="Username (required)"
+          className="flex-grow border border-gray-300 rounded px-3 py-2"
+        />
+
+        <label htmlFor="email" className="block text-sm font-medium">
+          Email
+        </label>
+
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email (required)"
           className="flex-grow border border-gray-300 rounded px-3 py-2"
         />
 
@@ -185,6 +218,8 @@ function Signup() {
           disabled={
             loading ||
             !formData.username.trim() ||
+            !formData.email.trim() ||
+            !isValidEmail(formData.email) ||
             !formData.password_1.trim() ||
             !formData.password_2.trim() ||
             formData.password_1 !== formData.password_2 ||

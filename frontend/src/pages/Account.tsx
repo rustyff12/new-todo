@@ -1,18 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLogout } from "../hooks/useLogout";
 
 function Account() {
   const [accountInfo, setAccountInfo] = useState({
-    username: "User",
-    email: "example@example.com",
-    todoTotal: "12",
-    complete: "8",
-    incomplete: "4",
+    username: "",
+    email: "",
+    todoTotal: "",
+    complete: "",
+    incomplete: "",
   });
 
   const handleLogout = useLogout();
 
   const button_css = "px-4 py-2 rounded cursor-pointer text-white ";
+
+  async function fetchAccountInfo() {
+    const token = localStorage.getItem("access");
+    if (!token) return;
+
+    try {
+      const res = await fetch("http://localhost:8000/api/account/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch account info");
+
+      const data = await res.json();
+      setAccountInfo(data);
+    } catch (error) {
+      console.error("Error fetching account info:", error);
+    }
+  }
+  useEffect(() => {
+    fetchAccountInfo();
+  }, []);
 
   return (
     <article className="border border-gray-300 rounded p-4 shadow-md space-y-3">
