@@ -35,13 +35,20 @@ def register_user(request):
     email = request.data.get("email") 
     password = request.data.get("password") 
 
-    if not username or not password:
-        return Response({"detail": "Username and password required"}, status=status.HTTP_400_BAD_REQUEST)
+    if not username:
+        return Response({"detail": "Username is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if not email:
+        return Response({"detail": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if not password:
+        return Response({"detail": "Password is required"}, status=status.HTTP_400_BAD_REQUEST)
+
     
     if User.objects.filter(username=username).exists():
         return Response({"detail": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
-    user = User.objects.create_user(username=username, password=password)
+    user = User.objects.create_user(username=username, email=email, password=password)
     return Response({"detail": "User created successfully"}, status=status.HTTP_201_CREATED)
 
 # log out
