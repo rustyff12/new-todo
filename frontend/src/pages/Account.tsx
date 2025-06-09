@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLogout } from "../hooks/useLogout";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function Account() {
   const [accountInfo, setAccountInfo] = useState({
@@ -14,8 +15,57 @@ function Account() {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
+  const [showModal, setShowModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
   const handleLogout = useLogout();
   const button_css = "px-4 py-2 rounded cursor-pointer text-white ";
+
+  async function handleDeleteAccount() {
+    const token = localStorage.getItem("access");
+
+    if (!deletePassword) {
+      toast.error("Please enter your password");
+      return;
+    }
+
+    try {
+      setDeleting(true);
+      const response = await fetch(
+        "http://localhost:8000/api/delete-account/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ password: deletePassword }),
+        }
+      );
+
+      if (response.status === 403) {
+        toast.error("Incorrect password");
+        return;
+      }
+
+      if (!response.ok) {
+        const data = await response.json();
+        toast.error(data?.detail || "Failed to delete account.");
+        return;
+      }
+
+      toast.success("Account deleted");
+      handleLogout();
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    } finally {
+      setShowModal(false);
+
+      setDeleting(false);
+    }
+  }
 
   async function fetchAccountInfo() {
     const token = localStorage.getItem("access");
@@ -107,10 +157,48 @@ function Account() {
           Log Out
         </button>
 
-        <button className={`bg-red-600 mt-2 hover:bg-red-800 ${button_css}`}>
+        <button
+          className={`bg-red-600 mt-2 hover:bg-red-800 ${button_css}`}
+          onClick={() => setShowModal(true)}
+        >
           Delete
         </button>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded shadow-md space-y-4 w-full max-w-sm">
+            <h3 className="text-xl font-bold text-gray-800">
+              Confirm Deletion
+            </h3>
+            <p className="text-sm text-gray-600">
+              Enter your password to delete your account:
+            </p>
+            <input
+              type="password"
+              value={deletePassword}
+              onChange={(e) => setDeletePassword(e.target.value)}
+              className="w-full px-3 py-2 border rounded"
+              placeholder="Password"
+            />
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                disabled={deleting}
+              >
+                {deleting ? "Deleting..." : "Confirm"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </article>
   );
 }

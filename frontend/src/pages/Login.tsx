@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { EyeOff, Eye } from "lucide-react";
 
 interface FormData {
   username: string;
@@ -13,6 +14,7 @@ function Login() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -74,17 +76,29 @@ function Login() {
           placeholder="Username"
           className="w-full border border-gray-300 rounded px-3 py-2"
         />
-        <label htmlFor="password" className="block text-sm font-medium">
-          Password
-        </label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
-          className="w-full border border-gray-300 rounded px-3 py-2"
-        />
+        <div className="relative">
+          <label htmlFor="password" className="block text-sm font-medium mb-1">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="w-full border border-gray-300 rounded px-3 py-2 pr-20"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-8 top-1/2 transform -translate-y-1/2 text-gray-500"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+        </div>
 
         <button
           type="submit"
