@@ -80,3 +80,19 @@ def account_info(request):
         "complete": complete,
         "incomplete": incomplete,
     })
+
+# delete account
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_account(request):
+    user = request.user
+    password = request.data.get("password")
+
+    if not password:
+        return Response({"detail": "Password is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if not user.check_password(password):
+        return Response({"detail": "Incorrect password"}, status=status.HTTP_403_FORBIDDEN)
+    
+    user.delete()
+    return Response({"detail": "Account deleted successfully"}, status=status.HTTP_200_OK)
