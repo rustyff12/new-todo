@@ -2,6 +2,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import PasswordInput from "../components/PasswordInput";
+import { register } from "../services/auth";
+import { isStrongPassword, isValidEmail } from "../utils/validation";
+import {
+  cardContainer,
+  cardHeading,
+  defaultButton,
+  inputBase,
+} from "../styles/ui";
 
 interface FormData {
   username: string;
@@ -19,16 +27,6 @@ function Signup() {
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  function isStrongPassword(password: string): boolean {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return regex.test(password);
-  }
-
-  function isValidEmail(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -67,23 +65,11 @@ function Signup() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/api/register/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password_1,
-        }),
+      await register({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password_1,
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        toast.error(data.detail || "Registration failed");
-        return;
-      }
 
       toast.success("Account created successfully!");
 
@@ -94,19 +80,21 @@ function Signup() {
         password_2: "",
       });
       navigate("/login");
-    } catch (error) {
-      toast.error("Something went wrong. Try again.");
-      console.error(error);
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(`Something went wrong: ${err.message}`);
+      } else {
+        toast.error("Something went wrong.");
+      }
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <section className="border border-gray-300 rounded p-4 shadow-md space-y-3">
-      <h2 className="text-2xl font-bold underline text-slate-800 mb-4">
-        Sign Up{" "}
-      </h2>
+    <section className={cardContainer}>
+      <h2 className={cardHeading}>Sign Up </h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">
         <label htmlFor="username" className="block text-sm font-medium">
           Username
@@ -118,7 +106,7 @@ function Signup() {
           value={formData.username}
           onChange={handleChange}
           placeholder="Username (required)"
-          className="flex-grow border border-gray-300 rounded px-3 py-2"
+          className={inputBase}
         />
 
         <label htmlFor="email" className="block text-sm font-medium">
@@ -131,7 +119,7 @@ function Signup() {
           value={formData.email}
           onChange={handleChange}
           placeholder="Email (required)"
-          className="flex-grow border border-gray-300 rounded px-3 py-2"
+          className={inputBase}
         />
 
         <PasswordInput
@@ -174,7 +162,7 @@ function Signup() {
             formData.password_1 !== formData.password_2 ||
             !isStrongPassword(formData.password_1)
           }
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+          className={defaultButton}
         >
           {loading ? "Creating Account..." : "Sign Up"}
         </button>

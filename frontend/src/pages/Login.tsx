@@ -1,8 +1,14 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-// import { EyeOff, Eye } from "lucide-react";
+import { login } from "../services/auth";
 import PasswordInput from "../components/PasswordInput";
+import {
+  cardContainer,
+  cardHeading,
+  defaultButton,
+  inputBase,
+} from "../styles/ui";
 
 interface FormData {
   username: string;
@@ -15,7 +21,7 @@ function Login() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  //   const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -31,19 +37,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/token/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        toast.error(data.detail || "Login failed");
-        return;
-      }
-
+      const data = await login(formData);
       // Clear existing tokens
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
@@ -52,19 +46,21 @@ function Login() {
       localStorage.setItem("refresh", data.refresh);
       toast.success("Logged in!");
       navigate("/");
-    } catch (error) {
-      toast.error("Something went wrong.");
-      console.error(error);
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(`Something went wrong: ${err.message}`);
+      } else {
+        toast.error("Something went wrong.");
+      }
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <section className="border border-gray-300 rounded p-4 shadow-md space-y-3">
-      <h2 className="text-2xl font-bold underline text-slate-800 mb-4">
-        Log In
-      </h2>
+    <section className={cardContainer}>
+      <h2 className={cardHeading}>Log In</h2>
       <form onSubmit={handleLogin} className="flex flex-col gap-4 mb-6">
         <label htmlFor="username" className="block text-sm font-medium">
           Username
@@ -75,32 +71,8 @@ function Login() {
           value={formData.username}
           onChange={handleChange}
           placeholder="Username"
-          className="w-full border border-gray-300 rounded px-3 py-2"
+          className={inputBase}
         />
-
-        {/* <div className="relative">
-          <label htmlFor="password" className="block text-sm font-medium mb-1">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className="w-full border border-gray-300 rounded px-3 py-2 pr-20"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-8 top-1/2 transform -translate-y-1/2 text-gray-500"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-          </div>
-        </div> */}
 
         <PasswordInput
           name="password"
@@ -112,7 +84,7 @@ function Login() {
         <button
           type="submit"
           disabled={loading || !formData.username || !formData.password}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 disabled:opacity-50"
+          className={defaultButton}
         >
           {loading ? "Logging in..." : "Login"}
         </button>
