@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import PasswordInput from "../components/PasswordInput";
 
 interface FormData {
   username: string;
@@ -18,9 +18,6 @@ function Signup() {
     password_2: "",
   });
   const [loading, setLoading] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [showPassword1, setShowPassword1] = useState(false);
-  const [showPassword2, setShowPassword2] = useState(false);
   const navigate = useNavigate();
 
   function isStrongPassword(password: string): boolean {
@@ -137,81 +134,33 @@ function Signup() {
           className="flex-grow border border-gray-300 rounded px-3 py-2"
         />
 
-        <div className="relative">
-          <label
-            htmlFor="password_1"
-            className="block text-sm font-medium mb-1"
-          >
-            Password
-          </label>
+        <PasswordInput
+          name="password_1"
+          value={formData.password_1}
+          onChange={handleChange}
+          label="Password"
+          placeholder="Password (required)"
+          tooltipContent={
+            <>
+              Password must contain at least:
+              <ul className="list-disc list-inside mt-1 space-y-1">
+                <li>8 characters</li>
+                <li>1 uppercase letter</li>
+                <li>1 lowercase letter</li>
+                <li>1 number</li>
+                <li>1 special character</li>
+              </ul>
+            </>
+          }
+        />
 
-          <div className="relative">
-            <input
-              type={showPassword1 ? "text" : "password"}
-              name="password_1"
-              value={formData.password_1}
-              onChange={handleChange}
-              placeholder="Password (required)"
-              className="w-full border border-gray-300 rounded px-3 py-2 pr-20"
-            />
-
-            {/* Eye Icon */}
-            <button
-              type="button"
-              onClick={() => setShowPassword1((prev) => !prev)}
-              className="absolute right-8 top-1/2 transform -translate-y-1/2 text-gray-500"
-              aria-label={showPassword1 ? "Hide password" : "Show password"}
-            >
-              {showPassword1 ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-
-            {/* ℹ️ Info Icon */}
-            <span
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-500 text-sm cursor-pointer select-none"
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
-              onClick={() => setShowTooltip((prev) => !prev)} // For mobile toggle
-            >
-              ℹ️
-            </span>
-
-            {/* Tooltip */}
-            {showTooltip && (
-              <div className="absolute right-0 top-full mt-2 w-64 bg-white border border-gray-300 rounded shadow-md text-black text-sm p-3 z-10">
-                Password must contain at least:
-                <ul className="list-disc list-inside mt-1 space-y-1">
-                  <li>8 characters</li>
-                  <li>1 uppercase letter</li>
-                  <li>1 lowercase letter</li>
-                  <li>1 number</li>
-                  <li>1 special character</li>
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <label htmlFor="password_2" className="block text-sm font-medium">
-          Please repeat password
-        </label>
-        <div className="relative">
-          <input
-            type={showPassword2 ? "text" : "password"}
-            name="password_2"
-            value={formData.password_2}
-            onChange={handleChange}
-            placeholder="Repeat Password (required)"
-            className="w-full border border-gray-300 rounded px-3 py-2 pr-10"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword2((prev) => !prev)}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
-            aria-label={showPassword2 ? "Hide password" : "Show password"}
-          >
-            {showPassword2 ? <EyeOff size={20} /> : <Eye size={20} />}
-          </button>
-        </div>
+        <PasswordInput
+          name="password_2"
+          value={formData.password_2}
+          onChange={handleChange}
+          label="Please Repeat Password"
+          placeholder="Repeat Password (required)"
+        />
 
         <button
           type="submit"

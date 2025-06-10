@@ -1,7 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { EyeOff, Eye } from "lucide-react";
+// import { EyeOff, Eye } from "lucide-react";
+import PasswordInput from "../components/PasswordInput";
 
 interface FormData {
   username: string;
@@ -14,7 +15,7 @@ function Login() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  //   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -76,7 +77,8 @@ function Login() {
           placeholder="Username"
           className="w-full border border-gray-300 rounded px-3 py-2"
         />
-        <div className="relative">
+
+        {/* <div className="relative">
           <label htmlFor="password" className="block text-sm font-medium mb-1">
             Password
           </label>
@@ -98,7 +100,14 @@ function Login() {
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
-        </div>
+        </div> */}
+
+        <PasswordInput
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          label="Password"
+        />
 
         <button
           type="submit"
