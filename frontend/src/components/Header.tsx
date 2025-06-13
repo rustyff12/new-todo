@@ -1,38 +1,44 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { css_desktop, css_mobile } from "../styles/ui";
+import { nav_obj } from "../utils/nav";
+import { useLogout } from "../hooks/useLogout";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const isAuthenticated = !!localStorage.getItem("access");
+  const handleLogout = useLogout();
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const location = useLocation();
 
-  const css_desktop =
-    "text-lg font-medium ml-4 hover:text-blue-400 hover:underline transition-colors";
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location]);
 
-  const css_mobile =
-    "block py-2 text-lg font-medium hover:text-blue-400 hover:underline transition-colors";
+  useEffect(() => {
+    if (!menuOpen) return;
 
-  const nav_obj = [
-    {
-      path: "/",
-      name: "Home",
-    },
-    {
-      path: "add",
-      name: "Add",
-    },
-    {
-      path: "login",
-      name: "Login",
-    },
-    {
-      path: "signup",
-      name: "Sign up",
-    },
-    {
-      path: "account",
-      name: "Account",
-    },
-  ];
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [menuOpen]);
+
+  const logoutButton = (
+    <button onClick={handleLogout} className={css_desktop}>
+      Logout
+    </button>
+  );
 
   return (
     <header className="bg-slate-800 text-white shadow-md">
@@ -47,6 +53,7 @@ function Header() {
               {item.name}
             </Link>
           ))}
+          {isAuthenticated && logoutButton}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -60,7 +67,7 @@ function Header() {
 
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <div className="md:hidden px-10 pb-4">
+        <div ref={menuRef} className="md:hidden px-10 pb-4">
           {nav_obj.map((item) => (
             <Link
               key={item.name}
@@ -71,6 +78,7 @@ function Header() {
               {item.name}
             </Link>
           ))}
+          {isAuthenticated && logoutButton}
         </div>
       )}
     </header>
