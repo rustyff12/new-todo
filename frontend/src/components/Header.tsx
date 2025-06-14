@@ -34,11 +34,21 @@ function Header() {
     };
   }, [menuOpen]);
 
-  const logoutButton = (
-    <button onClick={handleLogout} className={css_desktop}>
-      Logout
-    </button>
-  );
+  function renderLogoutButton(className: string) {
+    return (
+      <button onClick={handleLogout} className={className}>
+        Logout
+      </button>
+    );
+  }
+  console.log(location.pathname);
+  function pathMatchRoute(route: string) {
+    if (route !== "/") {
+      const partialRoute = "/" + route;
+      return partialRoute === location.pathname;
+    }
+    return route === location.pathname;
+  }
 
   return (
     <header className="bg-slate-800 text-white shadow-md">
@@ -49,11 +59,19 @@ function Header() {
         {/* Desktop Nav */}
         <nav className="hidden md:block">
           {nav_obj.map((item) => (
-            <Link key={item.name} to={item.path} className={css_desktop}>
+            <Link
+              key={item.name}
+              to={item.path}
+              className={`${css_desktop} ${
+                pathMatchRoute(item.path)
+                  ? "text-blue-400  border-b-3 font-extrabold"
+                  : "font-medium"
+              }`}
+            >
               {item.name}
             </Link>
           ))}
-          {isAuthenticated && logoutButton}
+          {isAuthenticated && renderLogoutButton(css_desktop)}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -78,7 +96,7 @@ function Header() {
               {item.name}
             </Link>
           ))}
-          {isAuthenticated && logoutButton}
+          {isAuthenticated && renderLogoutButton(css_mobile)}
         </div>
       )}
     </header>

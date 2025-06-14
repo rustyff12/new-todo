@@ -8,16 +8,8 @@ export const nav_obj = [
     name: "Add",
   },
   {
-    path: "/",
-    name: "Todos",
-  },
-  {
     path: "login",
     name: "Login",
-  },
-  {
-    path: "signup",
-    name: "Sign up",
   },
   {
     path: "account",
