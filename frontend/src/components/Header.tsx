@@ -41,7 +41,7 @@ function Header() {
       </button>
     );
   }
-  console.log(location.pathname);
+
   function pathMatchRoute(route: string) {
     if (route !== "/") {
       const partialRoute = "/" + route;
