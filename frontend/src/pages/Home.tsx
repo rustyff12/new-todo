@@ -1,57 +1,42 @@
 import { useEffect, useState } from "react";
-import type { ToDoItemType } from "../types";
-import ToDoList from "../components/ToDoList";
 import { Link } from "react-router-dom";
+import ToDoList from "../components/ToDoList";
 import NotAuthenticated from "../components/NotAuthenticated";
+import type { ToDoItemType } from "../types";
+import { useAuth } from "../contexts/AuthContext";
+import { fetchTodos } from "../services/todos";
 
 function Home() {
+  const { isAuthenticated, accessToken } = useAuth();
   const [todos, setTodos] = useState<ToDoItemType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  const url = "http://localhost:8000/api/todos/";
-
-  async function fetchTodos() {
-    const token = localStorage.getItem("access");
-
-    if (!token) {
-      setIsAuthenticated(false);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const res = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (res.status === 401) {
-        setIsAuthenticated(false);
+  useEffect(() => {
+    async function loadTodos() {
+      if (!accessToken) {
         setLoading(false);
         return;
       }
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch todos");
+      try {
+        const data = await fetchTodos(accessToken);
+        setTodos(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
+    }
 
-      const data: ToDoItemType[] = await res.json();
-      setTodos(data);
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error(error);
-    } finally {
+    if (isAuthenticated) {
+      loadTodos();
+    } else {
       setLoading(false);
     }
-  }
+  }, [isAuthenticated, accessToken]);
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  if (loading || isAuthenticated === null) return <p>Loading todos...</p>;
+  //   if (loading || isAuthenticated === null) return <p>Loading todos...</p>;
+  if (loading) return <p>Loading todos...</p>;
 
   if (!isAuthenticated) {
     return <NotAuthenticated />;

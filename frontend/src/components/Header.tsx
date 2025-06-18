@@ -57,7 +57,7 @@ function Header() {
         <h1 className="text-2xl font-bold text-center">My ToDo App</h1>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:block">
+        <nav className="hidden md:flex items-center">
           {nav_obj.map((item) => (
             <Link
               key={item.name}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services/auth";
+import { login as apiLogin } from "../services/auth";
 import PasswordInput from "../components/PasswordInput";
 import {
   cardContainer,
@@ -9,6 +9,7 @@ import {
   defaultButton,
   inputBase,
 } from "../styles/ui";
+import { useAuth } from "../contexts/AuthContext";
 
 interface FormData {
   username: string;
@@ -23,6 +24,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -37,13 +39,8 @@ function Login() {
     setLoading(true);
 
     try {
-      const data = await login(formData);
-      // Clear existing tokens
-      localStorage.removeItem("access");
-      localStorage.removeItem("refresh");
-
-      localStorage.setItem("access", data.access);
-      localStorage.setItem("refresh", data.refresh);
+      const data = await apiLogin(formData);
+      login(data.access, data.refresh);
       toast.success("Logged in!");
       navigate("/");
     } catch (err) {
