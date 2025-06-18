@@ -95,78 +95,88 @@ function Signup() {
   return (
     <section className={cardContainer}>
       <h2 className={cardHeading}>Sign Up </h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">
-        <label htmlFor="username" className="block text-sm font-medium">
-          Username
-        </label>
-
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          placeholder="Username (required)"
-          className={inputBase}
+      <div className="flex flex-col gap-3 justify-between md:flex-row">
+        <img
+          src="/key-image.jpg"
+          alt="Image of a hand holding keys"
+          className="rounded md:w-[45%] mb-6"
         />
-
-        <label htmlFor="email" className="block text-sm font-medium">
-          Email
-        </label>
-
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email (required)"
-          className={inputBase}
-        />
-
-        <PasswordInput
-          name="password_1"
-          value={formData.password_1}
-          onChange={handleChange}
-          label="Password"
-          placeholder="Password (required)"
-          tooltipContent={
-            <>
-              Password must contain at least:
-              <ul className="list-disc list-inside mt-1 space-y-1">
-                <li>8 characters</li>
-                <li>1 uppercase letter</li>
-                <li>1 lowercase letter</li>
-                <li>1 number</li>
-                <li>1 special character</li>
-              </ul>
-            </>
-          }
-        />
-
-        <PasswordInput
-          name="password_2"
-          value={formData.password_2}
-          onChange={handleChange}
-          label="Please Repeat Password"
-          placeholder="Repeat Password (required)"
-        />
-
-        <button
-          type="submit"
-          disabled={
-            loading ||
-            !formData.username.trim() ||
-            !formData.email.trim() ||
-            !isValidEmail(formData.email) ||
-            !formData.password_1.trim() ||
-            !formData.password_2.trim() ||
-            formData.password_1 !== formData.password_2 ||
-            !isStrongPassword(formData.password_1)
-          }
-          className={defaultButton}
+        <form
+          onSubmit={handleSubmit}
+          className="flex md:w-[45%] flex-col gap-4 mb-6"
         >
-          {loading ? "Creating Account..." : "Sign Up"}
-        </button>
-      </form>
+          <label htmlFor="username" className="block text-sm font-medium">
+            Username
+          </label>
+
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="Username (required)"
+            className={inputBase}
+          />
+
+          <label htmlFor="email" className="block text-sm font-medium">
+            Email
+          </label>
+
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email (required)"
+            className={inputBase}
+          />
+
+          <PasswordInput
+            name="password_1"
+            value={formData.password_1}
+            onChange={handleChange}
+            label="Password"
+            placeholder="Password (required)"
+            tooltipContent={
+              <>
+                Password must contain at least:
+                <ul className="list-disc list-inside mt-1 space-y-1">
+                  <li>8 characters</li>
+                  <li>1 uppercase letter</li>
+                  <li>1 lowercase letter</li>
+                  <li>1 number</li>
+                  <li>1 special character</li>
+                </ul>
+              </>
+            }
+          />
+
+          <PasswordInput
+            name="password_2"
+            value={formData.password_2}
+            onChange={handleChange}
+            label="Please Repeat Password"
+            placeholder="Repeat Password (required)"
+          />
+
+          <button
+            type="submit"
+            disabled={
+              loading ||
+              !formData.username.trim() ||
+              !formData.email.trim() ||
+              !isValidEmail(formData.email) ||
+              !formData.password_1.trim() ||
+              !formData.password_2.trim() ||
+              formData.password_1 !== formData.password_2 ||
+              !isStrongPassword(formData.password_1)
+            }
+            className={defaultButton}
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+        </form>
+      </div>
     </section>
   );
 }
